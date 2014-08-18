@@ -1,0 +1,3 @@
+[submodule "lib/javascript/clean-css"]
+	path = lib/javascript/clean-css
+	url = https://github.com/GoalSmashers/clean-css.git

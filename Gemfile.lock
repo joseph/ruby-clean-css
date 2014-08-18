@@ -1,0 +1,22 @@
+PATH
+  remote: .
+  specs:
+    ruby-clean-css (0.0.1)
+      commonjs
+      therubyracer
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    commonjs (0.2.7)
+    libv8 (3.16.14.3)
+    ref (1.0.5)
+    therubyracer (0.12.1)
+      libv8 (~> 3.16.14.0)
+      ref
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  ruby-clean-css!
