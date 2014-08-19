@@ -98,6 +98,10 @@ class RubyCleanCSS::Compressor
         js_opts['relativeTo'] = options[:relative_to].to_s
       end
 
+      if options.has_key?(:process_import)
+        js_opts['processImport'] = options[:process_import] ? true : false
+      end
+
       if options.has_key?(:no_rebase)
         js_opts['noRebase'] = options[:no_rebase] ? true : false
       elsif !options[:rebase_urls].nil?
@@ -124,16 +128,12 @@ class RubyCleanCSS::Compressor
         end
       end
 
-      if options.has_key?(:process_import)
-        raise('Ruby-Clean-CSS: processImport option is not yet supported')
-      end
-
       if options.has_key?(:benchmark)
-        raise('Ruby-Clean-CSS: benchmark option is not yet supported')
+        js_opts['benchmark'] = options[:benchmark] ? true : false
       end
 
       if options.has_key?(:debug)
-        raise('Ruby-Clean-CSS: debug option is not yet supported')
+        js_opts['debug'] = options[:debug] ? true : false
       end
 
       js_opts

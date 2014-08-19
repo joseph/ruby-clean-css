@@ -13,6 +13,11 @@ module RubyCleanCSS::Exports
 
   class Process # :nodoc:
 
+    def initialize
+      @init_time = Time.now
+    end
+
+
     def nextTick
       lambda { |global, fn| fn.call }
     end
@@ -20,6 +25,15 @@ module RubyCleanCSS::Exports
 
     def cwd
       lambda { Dir.pwd }
+    end
+
+
+    def hrtime
+      lambda { |this, hrt|
+        hrt = hrt || [0,0]
+        delta = Time.now - @init_time
+        [delta.to_i - hrt[0], (delta % 1 * 1000000000).to_i - hrt[1]]
+      }
     end
 
 
@@ -34,13 +48,13 @@ module RubyCleanCSS::Exports
   class Console # :nodoc:
 
     def log(*msgs)
-      STDOUT.puts(msgs.join(', '))
+      str = sprintf(*msgs)  rescue msgs.join(', ')
+      STDERR.puts(str)
     end
 
 
-    def warn(*msgs)
-      STDERR.puts(msgs.join(', '))
-    end
+    alias :warn :log
+    alias :error :log
 
   end
 

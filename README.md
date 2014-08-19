@@ -86,11 +86,10 @@ options](https://github.com/GoalSmashers/clean-css#how-to-use-clean-css-programm
 - `compatibility` - Use this to force Clean-CSS to be compatible with `ie7`
     or `ie8`. Default is neither. Supply as a symbol (`:ie7`) or
     string (`'ie7'`).
-
-The following options are not yet supported by this library:
-
-- `benchmark`
-- `debug`
+- `benchmark` - If set to true, will output the duration of each regex
+    replacement in ms to STDERR.
+- `debug` - If set to true, Clean-CSS will output explanatory information
+    to STDERR.
 
 In keeping with the Node library's interface, there are some synonyms available:
 
