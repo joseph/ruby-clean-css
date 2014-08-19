@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    ruby-clean-css (0.0.1)
+    ruby-clean-css (0.0.2)
       commonjs
       therubyracer
 
