@@ -11,10 +11,17 @@ compressor](https://github.com/sstephenson/ruby-yui-compressor) (which was
 by Yahoo in 2012).
 
 
+## Installation
+
+It's a gem!
+
+    $ gem install ruby-clean-css
+
+
 ## Usage
 
 You can use this library with Rails, or with Sprockets in non-Rails projects,
-or simply as a standalone library.
+or as a standalone library.
 
 
 ### As a plain Ruby library:
@@ -61,7 +68,7 @@ options](https://github.com/GoalSmashers/clean-css#how-to-use-clean-css-programm
 - `keep_special_comments` - A "special comment" is one that begins with `/*!`.
     You can keep them all with `:all`, just the first with `:first`, or
     remove them all with `:none`. The default is `:all`.
-- `keep_breaks` - By default, all linebreaks are stripped. Set to `true` to 
+- `keep_breaks` - By default, all linebreaks are stripped. Set to `true` to
     retain them.
 - `root` - This is the path used to resolve absolute `@import` rules and rebase
     relative URLS. A string. Defaults to the present working directory.
@@ -69,15 +76,15 @@ options](https://github.com/GoalSmashers/clean-css#how-to-use-clean-css-programm
     URLs. A string. No default.
 - `process_import` - By default, stylesheets included via `@import` are fetched
     and minified inline. Set to false to retain `@import` lines unmodified.
-- `rebase_urls` - By default, all URLs are rebased to the root. Set to `false` 
+- `rebase_urls` - By default, all URLs are rebased to the root. Set to `false`
     to prevent rebasing.
 - `advanced` - By default, Clean-CSS applies some advanced optimizations,
     like selector and property merging, reduction, etc). Set to `false` to
-    prevent these optimizations. 
+    prevent these optimizations.
 - `rounding_precision` - The rounding precision on measurements in your CSS.
     An integer, defaulting to `2`.
 - `compatibility` - Use this to force Clean-CSS to be compatible with `ie7`
-    or `ie8`. Default is neither. Supply as a symbol (`:ie7`) or 
+    or `ie8`. Default is neither. Supply as a symbol (`:ie7`) or
     string (`'ie7'`).
 
 The following options are not yet supported by this library:
@@ -89,8 +96,38 @@ In keeping with the Node library's interface, there are some synonyms available:
 
 - `:no_rebase => true` is the same as `:rebase_urls => false`.
 - `:no_advanced => true` is the same as `:advanced => false`.
-- `:keep_special_comments` has an alternative syntax: `'*'` means  `:all`, 
+- `:keep_special_comments` has an alternative syntax: `'*'` means  `:all`,
     `1` means `:first` and `0` means `:none`.
+
+
+## Rails local precompilation (reducing production dependencies)
+
+This is only relevant if a) you're using Rails and b) you always do local
+asset precompilation.
+
+V8 is a significant dependency to add to production servers just to
+minimise some code. That doesn't seem to bother most people, but if (like me)
+you zealously weed out unnecessary dependencies, you may prefer to do
+your asset precompilation on your dev machine (or a build server or similar).
+In this case, you don't want to add the gem to the `:assets` group in your
+Gemfile. You want it in the `:development` group -- gems in this group are
+not typically bundled onto production servers.
+
+Having done that, there may be another step before Rails will use
+Ruby-Clean-CSS for asset compression. Create `lib/tasks/assets.rake` and
+add this code:
+
+    namespace(:assets) do
+      task(:environment) do
+        require('ruby-clean-css')
+        require('ruby-clean-css/sprockets')
+        RubyCleanCSS::Sprockets.register(Rails.application.assets)
+        Rails.application.config.assets.css_compressor = :cleancss
+      end
+    end
+
+That's it. You don't need to change any practices. `rake assets:precompile`
+will now work like you expect.
 
 
 ## Contributing
