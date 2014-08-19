@@ -15,6 +15,7 @@ Gem::Specification.new do |gem|
   gem.version = RubyCleanCSS::VERSION
   gem.add_dependency('therubyracer')
   gem.add_dependency('commonjs')
+  gem.add_development_dependency('rake')
   gem.add_development_dependency('webmock')
 
   # Append all submodule files to the list of gem files.

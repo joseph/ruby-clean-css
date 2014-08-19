@@ -13,6 +13,7 @@ GEM
     crack (0.4.2)
       safe_yaml (~> 1.0.0)
     libv8 (3.16.14.3)
+    rake (10.3.2)
     ref (1.0.5)
     safe_yaml (1.0.3)
     therubyracer (0.12.1)
@@ -26,5 +27,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  rake
   ruby-clean-css!
   webmock

@@ -132,10 +132,7 @@ will now work like you expect.
 
 ## Contributing
 
-Pull requests are welcome. Please supply a test case with your PR. You
-typically run tests like this:
-
-    bundle exec ruby test/test_compressor.rb
+Pull requests are welcome. Please supply a test case with your PR.
 
 ## License
 
