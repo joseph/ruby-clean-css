@@ -11,18 +11,19 @@ class RubyCleanCSS::Compressor
 
 
   def compress(stream_or_string)
+    @last_result = result = { :min => nil }
     begin
-      out = minifier.minify(stream_or_string.to_s)
+      minifier.minify(stream_or_string.to_s, lambda { |this, errs, data|
+        result[:min] = data
+      })
     rescue => e
       raise(e)
     ensure
-      @last_result = {
-        :min => out,
-        :errors => minifier.context.errors,
-        :warnings => minifier.context.warnings
-      }
+      result[:errors] = minifier.context.errors
+      result[:warnings] = minifier.context.warnings
+      GC.start # This prevents unexplained segmentation faults in the ref gem!
     end
-    out
+    result[:min]
   end
 
 
@@ -55,8 +56,8 @@ class RubyCleanCSS::Compressor
         @js_env.native('util', RubyCleanCSS::Exports::Util)
         @js_env.native('fs', RubyCleanCSS::Exports::FS)
         @js_env.native('url', RubyCleanCSS::Exports::Url)
-        @js_env.native('http', RubyCleanCSS::Exports::Http)
-        @js_env.native('https', RubyCleanCSS::Exports::Https)
+        @js_env.native('http', RubyCleanCSS::Exports::Http.new)
+        @js_env.native('https', RubyCleanCSS::Exports::Http.new)
         @js_env
       end
     end

@@ -67,6 +67,8 @@ options](https://github.com/GoalSmashers/clean-css#how-to-use-clean-css-programm
     relative URLS. A string. Defaults to the present working directory.
 - `relative_to` - This path is used to resovle relative `@import` rules and
     URLs. A string. No default.
+- `process_import` - By default, stylesheets included via `@import` are fetched
+    and minified inline. Set to false to retain `@import` lines unmodified.
 - `rebase_urls` - By default, all URLs are rebased to the root. Set to `false` 
     to prevent rebasing.
 - `advanced` - By default, Clean-CSS applies some advanced optimizations,
@@ -80,7 +82,6 @@ options](https://github.com/GoalSmashers/clean-css#how-to-use-clean-css-programm
 
 The following options are not yet supported by this library:
 
-- `process_import`
 - `benchmark`
 - `debug`
 
@@ -91,6 +92,13 @@ In keeping with the Node library's interface, there are some synonyms available:
 - `:keep_special_comments` has an alternative syntax: `'*'` means  `:all`, 
     `1` means `:first` and `0` means `:none`.
 
+
+## Contributing
+
+Pull requests are welcome. Please supply a test case with your PR. You
+typically run tests like this:
+
+    bundle exec ruby test/test_compressor.rb
 
 ## License
 

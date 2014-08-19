@@ -15,4 +15,16 @@ Gem::Specification.new do |gem|
   gem.version = RubyCleanCSS::VERSION
   gem.add_dependency('therubyracer')
   gem.add_dependency('commonjs')
+  gem.add_development_dependency('webmock')
+
+  # Append all submodule files to the list of gem files.
+  gem_dir = File.expand_path(File.dirname(__FILE__)) + "/"
+  `git submodule --quiet foreach pwd`.split($\).each { |submodule_path|
+    Dir.chdir(submodule_path) {
+      submodule_relative_path = submodule_path.sub gem_dir, ""
+      `git ls-files`.split($\).each { |filename|
+        gem.files << "#{submodule_relative_path}/#{filename}"
+      }
+    }
+  }
 end
