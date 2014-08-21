@@ -4,16 +4,16 @@ This gem provides a Ruby interface to the
 [Clean-CSS](https://github.com/GoalSmashers/clean-css) Node library for
 minifying CSS files.
 
-Ruby-Clean-CSS provides much more modern and compatible minification of
-stylesheets than the old [YUI
+Ruby-Clean-CSS provides more up-to-date and compatible minification of
+stylesheets than the [YUI
 compressor](https://github.com/sstephenson/ruby-yui-compressor) (which was 
 [discontinued](http://www.yuiblog.com/blog/2012/10/16/state-of-yui-compressor)
-by Yahoo in 2012).
+by Yahoo in 2012)\*.
 
 
 ## Installation
 
-It's a gem!
+It's a gem, so:
 
     $ gem install ruby-clean-css
 
@@ -109,7 +109,7 @@ minimise some code. That doesn't seem to bother most people, but if (like me)
 you zealously weed out unnecessary dependencies, you may prefer to do
 your asset precompilation on your dev machine (or a build server or similar).
 In this case, you don't want to add the gem to the `:assets` group in your
-Gemfile. You want it in the `:development` group -- gems in this group are
+Gemfile. You want it in the `:development` group — gems in this group are
 not typically bundled onto production servers.
 
 Having done that, there may be another step before Rails will use
@@ -127,6 +127,33 @@ add this code:
 
 That's it. You don't need to change any practices. `rake assets:precompile`
 will now work like you expect.
+
+
+## \* Why this alternative?
+
+The YUI CSS compressor has been a faithful servant for years. But there are
+a few things it muddles up. The one that got me started was this:
+
+    -moz-transition: all 0s linear 200ms;
+
+Which the YUI compressor rewrites to:
+
+    -moz-transition:all 0 linear 200ms;
+
+Mozilla won't parse that, because `0` is not a valid time value. You may have 
+encountered other little gotchas, like `background:none` being erroneously 
+shortened to `background:0` and so on. In my testing, Clean-CSS produces a
+higher fidelity compression in these areas. (Here's a handy online tool for 
+comparative testing: http://gpbmike.github.io/refresh-sf/)
+
+Beyond that, Clean-CSS has some useful features around automatic inlining of
+`@import` statements, and rebasing of URLs to a common root.
+
+One final rationale is dependencies. Presumably you're also doing JS
+minification, and these days you're probably using a JavaScript library
+running on a JS VM to do it (Uglify, CoffeeScript, etc). Needing to install
+and run a full Java VM purely for CSS minification is arguably wasteful —
+it seems better to crush your styles the same way you crush the behavior.
 
 
 ## Contributing
